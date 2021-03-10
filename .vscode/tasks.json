@@ -10,7 +10,7 @@
         "image": "fychin/portfolio-report-service",
         "ports": [{
           "hostPort": 9091,
-          "containerPort": 8080
+          "containerPort": 80
         }],
         "command": "node dist/app.js",
         "env": {
