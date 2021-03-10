@@ -7,7 +7,7 @@ const client = got.extend({
   responseType: 'json',
 });
 
-function getDailyStockQuotesEndpoint(ticker) {
+function getDailyStockQuotesUrl(ticker) {
   const functionParam = 'function=TIME_SERIES_DAILY';
   const tickerParam = `symbol=${ticker}`;
   const apiKeyParam = `apikey=${API_KEY}`;
@@ -44,7 +44,7 @@ function transformHistoricalQuotesResponse(response) {
 }
 
 export function fetchMostRecentEndOfMonthClosingPrice(ticker) {
-  const dailyStockQuotesApi = getDailyStockQuotesEndpoint(ticker);
+  const dailyStockQuotesApi = getDailyStockQuotesUrl(ticker);
   return client(dailyStockQuotesApi)
     .then(response => transformHistoricalQuotesResponse(response));
 }
