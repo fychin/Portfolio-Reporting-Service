@@ -1,0 +1,30 @@
+name: Heroku CD
+
+on:
+  workflow_run:
+    workflows: ["CI Build"]
+    types:
+      - "completed"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Login to Heroku Container registry
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:login
+
+      - name: Pull from Dockerhub and push image to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          docker pull ${{ secrets.IMAGE_TAG }}:latest
+          docker tag ${{ secrets.IMAGE_TAG }} registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}
+          heroku container:push -a ${{ secrets.HEROKU_APP_NAME }} web 
+
+      - name: Deploy app
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:release -a ${{ secrets.HEROKU_APP_NAME }} web 
