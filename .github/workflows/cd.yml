@@ -22,6 +22,7 @@ jobs:
         run: |
           docker pull ${{ secrets.IMAGE_TAG }}:latest
           docker tag ${{ secrets.IMAGE_TAG }} registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}
+          docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}
           heroku container:push -a ${{ secrets.HEROKU_APP_NAME }} web 
 
       - name: Deploy app
